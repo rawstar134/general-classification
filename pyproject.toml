@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "news-classification"
+version = "0.0.1"
+description = "news classification using LSTM"
+authors = ["rawstar134 <prajapatihs2004@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9 <3.13"
+numpy = "^1.26.0"
+pandas = "^2.1.1"
+torch = "^2.0.1"
+nltk = "^3.8.1"
+torchvision = "^0.15.2"
+matplotlib = "^3.8.0"
+sklearn = "^0.0.post9"
+scikit-learn = "^1.3.1"
+sent2vec = "^0.3.0"
+torchmetrics = "^1.2.0"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
