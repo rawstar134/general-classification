@@ -1,3 +1,4 @@
+from ast import Num
 import torch
 import torch
 from torch.utils.data import Dataset
@@ -7,30 +8,30 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import torch.nn.functional as F
-from utils import load_data, sentence_embedding, label_encoding
-
+from utils import load_pickle
 class NewsSentenceLevelClassificationDataset(Dataset):
-    def __init__(
-        self,file_path
-    ):
-        self.file_path = file_path
-
+    def __init__(self,data_path,label_path,num,mode):
+        self.data_path = data_path
+        self.label_path = label_path
+        self.mode = mode
+        self.num = num
         #load dataset
-        title, classes, class_count = load_data(self.file_path)
+        title, classes, class_count = load_pickle(self.data_path,self.label_path,self.num,self.mode)
         #sentence embedding
-        embedded_title = sentence_embedding(title)
+        #embedded_title = sentence_embedding(title)
 
         #label encoding
-        label_encode= label_encoding(classes)
-        self.embedding = np.array(embedded_title)
-        self.classes = np.array(label_encode)
-        self.num_class = int(class_count)
 
+        #label_encode= label_encoding(classes)
+        self.data = title
+        self.classes = classes
+        self.num_class = class_count
+        print(len(self.data))
 
     def __len__(self):
-        print(len(self.embedding))
-        return len(self.embedding)
+        return len(self.data)
 
     def __getitem__(self,idx):
+        X = self.data[idx]
         Y = F.one_hot(torch.tensor(self.classes[idx]), num_classes=self.num_class)
-        return self.embedding[idx], Y
+        return X, Y
