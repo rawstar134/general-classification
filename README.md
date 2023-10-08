@@ -1,4 +1,4 @@
-# general-classification
+# News-classification
 Classification of College Name, Organization Name, Date, Object  etc...
 
 
