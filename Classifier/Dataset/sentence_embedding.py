@@ -4,7 +4,7 @@ import pandas as pd
 from sent2vec.vectorizer import Vectorizer
 jump = 256
 def sentence_embedding(text_list):
-  f = open("embedding.pkl","ab")
+  f = open("embedding.pkl","wb")
   for i in range(0,len(text_list),jump):
     vector_obj =Vectorizer()
     sentence_vector = []
