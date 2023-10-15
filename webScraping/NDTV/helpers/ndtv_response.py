@@ -1,14 +1,14 @@
 
-class response():
+class response:
     def __init__(self, response_object):
         self.status = ""
         self.error_message = ""
         self.response = response_object
         self.final_response = []
 
-    def __call__(self, *args, **kwargs):
-
-        if not self.response:
+    def get_response(self):
+        print(len(self.response))
+        if len(self.response) > 0:
             self.status = "Success"
             self.error_message = ""
             self.final_response.append(self.status)

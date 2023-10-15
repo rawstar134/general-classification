@@ -18,5 +18,7 @@ def handler():
     ndtv = NdtvNews(news_link)
     get_response = ndtv.get_news()
     status = response(response_object=get_response)
-    print("Final status",status.final_response[0])
-    return status
+    final_response = status.get_response()
+    return final_response
+
+
