@@ -1,14 +1,28 @@
+import logging
+
 import requests
 from bs4 import BeautifulSoup
-import logging
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
+# dictionary format of the api
+# news_dictionary = {
+#     "news": "NDTV",
+#     "links": ndtv_latest,
+#     "type": "",
+#     "headline": "",
+#     "content": [],
+#     "news_link": ""
+# }
 # https://ndtv.com/latest
+
+""" news types : trending, """
+
+
 def latest_news(news_link):
     response_news = []
     for ndtv_latest in news_link:
-        try :
+        try:
             res = requests.get(ndtv_latest)
             soup = BeautifulSoup(res.content, 'html.parser')
             logging.info(f"Called the NDTV API {ndtv_latest}")
@@ -31,18 +45,50 @@ def latest_news(news_link):
                         content_response = get_content_by_url(text['href'])
                         news_dictionary['news'] = "NDTV"
                         news_dictionary['root_link'] = ndtv_latest
+                        news_dictionary['type'] = "trending"
                         news_dictionary['headline'] = text.string
                         news_dictionary['content'] = content_response
                         news_dictionary['news_link'] = text['href']
                         news.append(news_dictionary)
-            print(len(news))
-            logging.info(f"Fetched {len(news)} news")
+            logging.info(f"{len(news)} news found at {ndtv_latest}")
             news_response['link'] = ndtv_latest
             news_response['news'] = news
             response_news.append(news_response)
 
         except():
             pass;
+    return response_news
+
+
+def page_content(news_link):
+    response_news = []
+    for ndtv_latest in news_link:
+        try:
+            res = requests.get(ndtv_latest)
+            soup = BeautifulSoup(res.content, 'html.parser')
+            logging.info(f" Fetch news from {ndtv_latest}")
+            news_response = {}
+            news = []
+            # get the latest news
+            for row in soup.find_all('div', attrs={'class': 's-ls_txt'}):
+                for text in row.find_all('a'):
+                    news_dictionary = {}
+                    if text['href'] is not None:
+                        content_response = get_content_by_url(text['href'])
+                        news_dictionary['news'] = "NDTV"
+                        news_dictionary['root_link'] = ndtv_latest
+                        news_dictionary['type'] = "trending"
+                        news_dictionary['headline'] = text.string
+                        news_dictionary['content'] = content_response
+                        news_dictionary['news_link'] = text['href']
+                        news.append(news_dictionary)
+            logging.info(f"{len(news)} news found at {ndtv_latest}")
+            news_response['link'] = ndtv_latest
+            news_response['news'] = news
+            response_news.append(news_response)
+
+        except():
+            logging.info(f"News not found at {ndtv_latest}")
     return response_news
 
 
@@ -66,14 +112,14 @@ def get_content_by_url(link):
 
     # date modified
     date = ""
-    if article_published is not None :
+    if article_published is not None:
         date = article_published.string
     # short description
     description = ""
     if article_description is not None:
         description = article_description.string
     # content
-    if article_body is not None :
+    if article_body is not None:
         for p_tag in article_body(['p']):
             if p_tag is not None:
                 contents.append(p_tag.string)
@@ -93,6 +139,3 @@ def get_content_by_url(link):
     content_response['date'] = date
 
     return content_response
-
-
-
