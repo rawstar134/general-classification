@@ -90,7 +90,7 @@ def page_news(news_link):
                                 content_response = get_content_by_url(news_['href'])
                                 news_dictionary['news'] = "NDTV"
                                 news_dictionary['root_link'] = ndtv_latest
-                                news_dictionary['type'] = "trending"
+                                news_dictionary['type'] = ndtv_latest.split("/")[-2]
                                 news_dictionary['headline'] = news_.string
                                 news_dictionary['content'] = content_response
                                 news_dictionary['news_link'] = news_['href']
