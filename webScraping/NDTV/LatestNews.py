@@ -56,7 +56,7 @@ def latest_news(news_link):
             response_news.append(news_response)
 
         except():
-            pass;
+            pass
     return response_news
 
 
